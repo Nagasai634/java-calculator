@@ -19,28 +19,24 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+// This ensures the jar task includes the main class in manifest
 jar {
     manifest {
         attributes(
-            'Main-Class': 'com.example.calculator.Main',
-            'Implementation-Title': 'Calculator App',
-            'Implementation-Version': version
+            'Main-Class': 'com.example.calculator.Main'
         )
     }
-    archiveBaseName = 'app'
-    archiveVersion = ''  // Remove version from jar name
+    archiveBaseName = 'calculator-app'
+    archiveVersion = ''  // Remove version from jar name to get just calculator-app.jar
 }
 
-// Create a separate task for fat jar
+// Create a fat jar that includes all dependencies
 task fatJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'com.example.calculator.Main'
     }
-    archiveBaseName = 'app-fat'
-    from sourceSets.main.output
-    dependsOn configurations.runtimeClasspath
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+    archiveBaseName = 'calculator-app'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
