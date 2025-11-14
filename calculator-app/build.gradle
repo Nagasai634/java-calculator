@@ -28,6 +28,24 @@ jar {
             'Main-Class': 'com.example.calculator.Main'
         )
     }
-    // Output name for the jar
+    // Include runtime dependencies if any
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveFileName.set('app.jar')
+}
+
+// Create a fat jar with all dependencies
+tasks.register('fatJar', Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.example.calculator.Main'
+    }
+    archiveBaseName = 'app-fat'
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
