@@ -21,3 +21,8 @@ dependencies {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+
+// forward standard input to gradle run so Scanner reads from the terminal
+tasks.named('run', JavaExec) {
+    standardInput = System.in
+}
