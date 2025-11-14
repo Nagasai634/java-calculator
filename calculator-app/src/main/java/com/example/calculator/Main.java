@@ -55,8 +55,8 @@ public class Main {
 
         server.start();
 
-        // 🔥 Keeps the container alive
-        Thread.currentThread().join();
+        // 🔥 Keeps main thread alive so container doesn't exit
+        Thread.sleep(Long.MAX_VALUE);
     }
 
     private static Map<String, String> parseQuery(String query) {
@@ -73,4 +73,3 @@ public class Main {
         os.close();
     }
 }
-
