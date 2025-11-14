@@ -37,10 +37,10 @@ public class Main {
                 double result;
 
                 switch (op) {
-                    case "add":      result = calc.add(a, b); break;
-                    case "sub":      result = calc.subtract(a, b); break;
-                    case "mul":      result = calc.multiply(a, b); break;
-                    case "div":      result = calc.divide(a, b); break;
+                    case "add": result = calc.add(a, b); break;
+                    case "sub": result = calc.subtract(a, b); break;
+                    case "mul": result = calc.multiply(a, b); break;
+                    case "div": result = calc.divide(a, b); break;
                     default:
                         sendResponse(exchange, 400, "Invalid operator");
                         return;
@@ -54,6 +54,9 @@ public class Main {
         });
 
         server.start();
+
+        // 🔥 Keeps the container alive
+        Thread.currentThread().join();
     }
 
     private static Map<String, String> parseQuery(String query) {
@@ -70,3 +73,4 @@ public class Main {
         os.close();
     }
 }
+
