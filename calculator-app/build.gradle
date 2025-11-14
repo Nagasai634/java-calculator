@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.example'
+version = '1.0'
+
+application {
+    mainClass = 'com.example.calculator.Main'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // No external dependencies required
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
