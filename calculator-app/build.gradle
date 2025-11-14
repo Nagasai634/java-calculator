@@ -14,30 +14,25 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    // No external dependencies required
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 jar {
     manifest {
         attributes(
-            'Main-Class': 'com.example.calculator.Main'
+            'Main-Class': 'com.example.calculator.Main',
+            'Implementation-Title': 'Calculator App',
+            'Implementation-Version': version
         )
     }
-    // Include runtime dependencies if any
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveFileName.set('app.jar')
+    archiveBaseName = 'app'
+    archiveVersion = ''  // Remove version from jar name
 }
 
-// Create a fat jar with all dependencies
-tasks.register('fatJar', Jar) {
+// Create a separate task for fat jar
+task fatJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'com.example.calculator.Main'
     }
@@ -45,7 +40,7 @@ tasks.register('fatJar', Jar) {
     from sourceSets.main.output
     dependsOn configurations.runtimeClasspath
     from {
-        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
